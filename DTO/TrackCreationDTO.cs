@@ -18,5 +18,7 @@ namespace MeterReaderAPI.DTO
 
         [Required(ErrorMessage = "the field with name {0} is required")]
         public DateTime Date { get; set; }
+
+        public DateTime CreatedDate { get; set; }
     }
 }

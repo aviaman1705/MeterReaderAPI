@@ -13,21 +13,15 @@ namespace MeterReaderAPI.Services
             _context = context;
         }
 
-        public async void Create(Track entity)
-        {
-            _context.Tracks.Add(entity);
-            await _context.SaveChangesAsync();
-        }
-
         [HttpGet("{id:int}")]
         public Task<Track> Get(int id)
         {
             return _context.Tracks.FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public IQueryable<Track> GetAll()
+        public Task<List<Track>> GetAll()
         {
-            return _context.Tracks;
+            return _context.Tracks.ToListAsync();
         }
 
         public async Task<bool> Update(Track entity)
@@ -41,12 +35,11 @@ namespace MeterReaderAPI.Services
                 track.Desc = entity.Desc;
                 track.Date = entity.Date;
                 track.CreatedDate = DateTime.Now;
-                await _context.SaveChangesAsync();
-                return true;
+
+                return  true;
             }
 
-            return false;
+            return  false;
         }
-
     }
 }

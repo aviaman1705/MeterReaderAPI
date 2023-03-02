@@ -22,12 +22,14 @@ namespace MeterReaderAPI.Controllers
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<List<TrackDTO>>> Get([FromQuery] PaginationDTO paginationDTO)
+        public async Task<ActionResult<SysDataTablePager<TrackDTO>>> Get(int page, int itemPerPage, string sortColumn, string sortType)
         {
-            var queryable = repository.GetAll().AsQueryable();
-            await HttpContext.InsertParametersPagintionInHelper(queryable);
-            var tracks = await queryable.OrderByDescending(x => x.Date).Paginate(paginationDTO).ToListAsync();
-            return mapper.Map<List<TrackDTO>>(tracks);
+            var tracks = mapper.Map<List<TrackDTO>>(await repository.GetAll());
+            int totalItems = tracks.Count;
+            tracks = Sort(sortColumn, sortType, tracks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+
+            var tracksPaged = new SysDataTablePager<TrackDTO>(tracks, totalItems, itemPerPage, page);
+            return tracksPaged;
         }
 
         [HttpGet("{id:int}")]
@@ -52,25 +54,15 @@ namespace MeterReaderAPI.Controllers
 
             if (track == null)
             {
-                return NotFound();  
+                return NotFound();
 
             }
 
-            track = mapper.Map<Track>(trackCreationDTO);
-            track.Id = id;
+            track = mapper.Map(trackCreationDTO, track);
 
             await repository.Update(track);
             return NoContent();
         }
-
-        [HttpPost]
-        public async Task<ActionResult> Post([FromBody] TrackCreationDTO trackCreationDTO)
-        {
-            var track = mapper.Map<Track>(trackCreationDTO);
-            repository.Create(track);         
-            return NoContent();
-        }
-
         private List<TrackDTO> Sort(string sortColumn, string sortType, List<TrackDTO> list)
         {
             switch (sortColumn)
