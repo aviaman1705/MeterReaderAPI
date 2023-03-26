@@ -3,7 +3,6 @@ using MeterReaderAPI.DTO;
 using MeterReaderAPI.Entities;
 using MeterReaderAPI.Helpers;
 using MeterReaderAPI.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,24 +12,77 @@ namespace MeterReaderAPI.Controllers
     [ApiController]
     public class TracksController : ControllerBase
     {
-        private readonly ITrackRepository repository;        
+        private readonly ITrackRepository repository;
         private readonly IMapper mapper;
         public TracksController(ApplicationDbContext context, ITrackRepository repository, IMapper mapper)
         {
-            this.repository = repository;            
+            this.repository = repository;
             this.mapper = mapper;
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<SysDataTablePager<TrackDTO>>> Get(int page, int itemPerPage, string sortColumn, string sortType)
+        public async Task<ActionResult<List<TrackDTO>>> Get([FromQuery] PaginationDTO paginationDTO, string sortColumn, string sortDir, string search = "")
         {
-            var tracks = mapper.Map<List<TrackDTO>>(await repository.GetAll());
-            int totalItems = tracks.Count;
-            tracks = Sort(sortColumn, sortType, tracks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+            IQueryable<Track> queryable;
 
-            var tracksPaged = new SysDataTablePager<TrackDTO>(tracks, totalItems, itemPerPage, page);
-            return tracksPaged;
+            if (!string.IsNullOrEmpty(search))
+            {
+                queryable = repository.GetAll()
+                 .Where(m => m.Called.ToString().Contains(search)
+                           || m.Date.ToString().Contains(search)
+                           || m.Desc.Contains(search)
+                           || m.UnCalled.ToString().Contains(search));
+            }
+            else
+            {
+                queryable = repository.GetAll();
+            }
+
+            await HttpContext.InsertParametersPagintionInHelper(queryable);
+            var sortingQueryable = SortFunction(sortColumn, sortDir, queryable);
+            var tracks = await sortingQueryable.Paginate(paginationDTO).ToListAsync();
+            return mapper.Map<List<TrackDTO>>(tracks);
         }
+
+        private IQueryable<Track>? SortFunction(string sortColumn, string sortDir, IQueryable<Track>? list)
+        {
+            switch (sortColumn)
+            {
+                case "id":
+                    if (sortDir == "desc")
+                        list = list.OrderByDescending(c => c.Id);
+                    else
+                        list = list.OrderBy(c => c.Id);
+                    break;
+                case "called":
+                    if (sortDir == "desc")
+                        list = list.OrderByDescending(c => c.Called);
+                    else
+                        list = list.OrderBy(c => c.Called);
+                    break;
+                case "unCalled":
+                    if (sortDir == "desc")
+                        list = list.OrderByDescending(c => c.UnCalled);
+                    else
+                        list = list.OrderBy(c => c.UnCalled);
+                    break;
+                case "desc":
+                    if (sortDir == "desc")
+                        list = list.OrderByDescending(c => c.Desc);
+                    else
+                        list = list.OrderBy(c => c.Desc);
+                    break;
+                case "date":
+                    if (sortDir == "desc")
+                        list = list.OrderByDescending(c => c.Date);
+                    else
+                        list = list.OrderBy(c => c.Date);
+                    break;
+            }
+
+            return list;
+        }
+
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<TrackDTO>> Get(int id)
@@ -42,7 +94,7 @@ namespace MeterReaderAPI.Controllers
                 return NotFound();
             }
 
-            var dto = mapper.Map<TrackDTO>(track);            
+            var dto = mapper.Map<TrackDTO>(track);
             return dto;
         }
 
@@ -93,3 +145,4 @@ namespace MeterReaderAPI.Controllers
         }
     }
 }
+
