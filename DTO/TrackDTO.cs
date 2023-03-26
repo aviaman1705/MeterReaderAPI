@@ -10,7 +10,7 @@
 
         public string Desc { get; set; }
 
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
 
         public DateTime CreatedDate { get; set; }
     }

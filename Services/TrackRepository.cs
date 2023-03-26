@@ -19,9 +19,9 @@ namespace MeterReaderAPI.Services
             return _context.Tracks.FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public IQueryable<Track> GetAll()
+        public Task<List<Track>> GetAll()
         {
-            return _context.Tracks.AsQueryable();
+            return _context.Tracks.ToListAsync();
         }
 
         public async Task<bool> Update(Track entity)
@@ -41,6 +41,5 @@ namespace MeterReaderAPI.Services
 
             return  false;
         }
-
     }
 }

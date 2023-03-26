@@ -4,7 +4,7 @@ namespace MeterReaderAPI.Services
 {
     public interface IRepository<T>
     {
-        IQueryable<T> GetAll();
+        Task<List<T>> GetAll();
 
         Task<T> Get(int id);
 

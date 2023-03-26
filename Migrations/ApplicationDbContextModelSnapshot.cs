@@ -63,31 +63,12 @@ namespace MeterReaderAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NotebookId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UnCalled")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NotebookId");
-
                     b.ToTable("Tracks");
-                });
-
-            modelBuilder.Entity("MeterReaderAPI.Entities.Track", b =>
-                {
-                    b.HasOne("MeterReaderAPI.Entities.Notebook", null)
-                        .WithMany("tracks")
-                        .HasForeignKey("NotebookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MeterReaderAPI.Entities.Notebook", b =>
-                {
-                    b.Navigation("tracks");
                 });
 #pragma warning restore 612, 618
         }

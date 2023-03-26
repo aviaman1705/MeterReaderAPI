@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public int? Number { get; set; }
-        public string StreetName { get; set; }
+        public string StreetName { get; set; }       
     }
 }
