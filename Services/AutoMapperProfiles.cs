@@ -8,7 +8,10 @@ namespace MeterReaderAPI.Services
     {
         public AutoMapperProfiles()
         {
-            CreateMap<NotebookDTO,Notebook>().ReverseMap();
+            CreateMap<Track, SearchDTO>()
+                .ForMember(x => x.Title, dto => dto.MapFrom(prop => prop.Desc))
+                .ForMember(x => x.Link, dto => dto.MapFrom(prop => $"/tracks/edit/{prop.Id}"));
+
             CreateMap<Track,TrackDTO>().ReverseMap();   
         }
     }
