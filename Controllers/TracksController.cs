@@ -24,7 +24,9 @@ namespace MeterReaderAPI.Controllers
         [HttpGet("")]
         public async Task<ActionResult<SysDataTablePager<TrackDTO>>> Get(int page, int itemPerPage, string sortColumn, string sortType)
         {
-            var tracks = mapper.Map<List<TrackDTO>>(await repository.GetAll());
+            var queryable = repository.GetAll();
+            await HttpContext.InsertParametersPagintionInHelper(queryable);
+            var tracks = mapper.Map<List<TrackDTO>>(await queryable.ToListAsync());
             int totalItems = tracks.Count;
             tracks = Sort(sortColumn, sortType, tracks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
 

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MeterReaderAPI.DTO;
 using MeterReaderAPI.Entities;
+using MeterReaderAPI.Helpers;
 using MeterReaderAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,15 +20,16 @@ namespace MeterReaderAPI.Controllers
         public SearchController(ITrackRepository repository, IMapper mapper)
         {
             this.repository = repository;
-            this.mapper = mapper;       
+            this.mapper = mapper;
         }
 
 
         [HttpGet("{term}")]
         public async Task<ActionResult<List<SearchDTO>>> Get(string term)
-        {
-            var searchResults= mapper.Map<List<SearchDTO>>(await repository.GetAll()).Where(x => x.Title.Contains(term)).ToList();
-            
+        {           
+            var queryable = repository.GetAll();
+            var searchResults = mapper.Map<List<SearchDTO>>(repository.GetAll().Where(x => x.Desc.Contains(term))).ToList();
+
             if (searchResults == null)
             {
                 return NotFound();

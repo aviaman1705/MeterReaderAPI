@@ -42,7 +42,6 @@ namespace MeterReaderAPI
                 options.Filters.Add(typeof(ParseBadRequest));
             }).ConfigureApiBehaviorOptions(BadRequestsBehavior.Parse);
 
-            services.AddScoped<INotebookRepository, InMemoryRepository>();
             services.AddScoped<ITrackRepository, TrackRepository>();
 
             services.AddSwaggerGen(c =>
