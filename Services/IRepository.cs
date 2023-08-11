@@ -6,8 +6,11 @@ namespace MeterReaderAPI.Services
     {
         IQueryable<T> GetAll();
 
-        Task<T> Get(int id);
+        T Get(int id);
+        void Add(T item);
 
-        Task<bool> Update(T entity);
+        bool Update(T entity);
+
+        bool Delete(int id);
     }
 }

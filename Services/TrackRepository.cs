@@ -1,4 +1,5 @@
-﻿using MeterReaderAPI.Entities;
+﻿using MeterReaderAPI.DTO;
+using MeterReaderAPI.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,19 +14,58 @@ namespace MeterReaderAPI.Services
             _context = context;
         }
 
-        [HttpGet("{id:int}")]
-        public Task<Track> Get(int id)
+        public void Add(Track item)
         {
-            return _context.Tracks.FirstOrDefaultAsync(t => t.Id == id);
-        }
-        IQueryable<Track> IRepository<Track>.GetAll()
-        {
-            return _context.Tracks.AsQueryable();
+            _context.Tracks.Add(item);
+            _context.SaveChanges();
         }
 
-        public async Task<bool> Update(Track entity)
+        public bool Delete(int id)
         {
-            var track = await _context.Tracks.FirstOrDefaultAsync(x => x.Id == entity.Id);
+            bool isDeleted = false;
+            Track entity = _context.Tracks.FirstOrDefault(p => p.Id == id);
+            if (entity != null)
+            {
+                _context.Tracks.Remove(entity);
+                _context.SaveChanges();
+                isDeleted = true;
+            }
+            return isDeleted;
+        }
+
+        public Track Get(int id)
+        {
+            return _context.Tracks.FirstOrDefault(x => x.Id == id);
+        }
+
+        public IQueryable<Track> GetAll()
+        {
+            return _context.Tracks;
+        }
+
+        public Dashboard GetDashboardData()
+        {
+            Dashboard dashboard = new Dashboard();            
+            dashboard.DashboardSummary.Called = _context.Tracks.Sum(x => x.Called);
+            dashboard.DashboardSummary.UnCalled = _context.Tracks.Sum(x => x.UnCalled);
+            dashboard.DashboardSummary.MonthlyCalled = _context.Tracks.Where(x => x.Date.Year == DateTime.Now.Year && x.Date.Month == DateTime.Now.Month).Sum(x => x.Called);
+            dashboard.DashboardSummary.MonthlyUnCalled = _context.Tracks.Where(x => x.Date.Year == DateTime.Now.Year && x.Date.Month == DateTime.Now.Month).Sum(x => x.UnCalled);
+
+            dashboard.MonthlyData = _context.Tracks
+           .GroupBy(x => new { x.Date.Year, x.Date.Month })
+           .Select(g => new MonthlyData()
+           {
+               Date = $"{g.Key.Month}/{g.Key.Year}",
+               Called = g.Sum(x => x.Called),
+               UnCalled = g.Sum(x => x.UnCalled)
+           }).ToList();
+
+            return dashboard;
+        }
+
+        public bool Update(Track entity)
+        {
+            var track = _context.Tracks.FirstOrDefault(x => x.Id == entity.Id);
 
             if (track != null)
             {
@@ -35,10 +75,11 @@ namespace MeterReaderAPI.Services
                 track.Date = entity.Date;
                 track.CreatedDate = DateTime.Now;
 
-                return  true;
+                _context.SaveChanges();
+                return true;
             }
 
-            return  false;
+            return false;
         }
     }
 }
