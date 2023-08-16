@@ -8,6 +8,6 @@
             MonthlyData = new List<MonthlyData>();
         }
         public DashboardSummary DashboardSummary { get; set; }
-        public List<MonthlyData> MonthlyData { get; set; }
+        public List<MonthlyData> MonthlyData { get; set; }      
     }
 }
