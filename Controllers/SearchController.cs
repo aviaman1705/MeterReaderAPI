@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using MeterReaderAPI.DTO;
-using MeterReaderAPI.Entities;
+using MeterReaderAPI.Helpers;
 using MeterReaderAPI.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace MeterReaderAPI.Controllers
 {
@@ -19,21 +17,20 @@ namespace MeterReaderAPI.Controllers
         public SearchController(ITrackRepository repository, IMapper mapper)
         {
             this.repository = repository;
-            this.mapper = mapper;       
+            this.mapper = mapper;
         }
 
-
-        [HttpGet("{term}")]
-        public async Task<ActionResult<List<SearchDTO>>> Get(string term)
+        [HttpGet]
+        public async Task<ActionResult<SysDataTablePager<SearchDTO>>> Get(int page, int itemPerPage, string term)
         {
-            var searchResults= mapper.Map<List<SearchDTO>>(await repository.GetAll()).Where(x => x.Title.Contains(term)).ToList();
-            
-            if (searchResults == null)
-            {
-                return NotFound();
-            }
+            var queryable = repository.GetAll();
+            var searchResults = mapper.Map<List<SearchDTO>>(await queryable.Where(x => x.Desc.Contains(term)).ToListAsync());
+          
+            int totalItems = searchResults.Count;
+            searchResults = searchResults.Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
 
-            return searchResults;
+            var searchResultPaged = new SysDataTablePager<SearchDTO>(searchResults, totalItems, itemPerPage, page);
+            return searchResultPaged;
         }
     }
 }
