@@ -10,10 +10,11 @@ namespace MeterReaderAPI.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<Track, TrackGridItem>();
+            CreateMap<Street, StreetDTO>().ReverseMap();
         }
         //public AutoMapperProfiles(GeometryFactory geometryFactory)
         //{
-        //    CreateMap<GenreDTO, Genre>().ReverseMap();
+        //    
         //    CreateMap<GenreCreationDTO, Genre>();
 
         //    CreateMap<ActorDTO, Actor>().ReverseMap();

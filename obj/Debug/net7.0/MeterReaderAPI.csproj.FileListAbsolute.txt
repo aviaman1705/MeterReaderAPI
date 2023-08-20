@@ -1,5 +1,6 @@
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\appsettings.Development.json
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\appsettings.json
+E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\libman.json
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\MeterReaderAPI.exe
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\MeterReaderAPI.deps.json
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\MeterReaderAPI.runtimeconfig.json
@@ -10,6 +11,7 @@ E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\AutoMapper.Extensions
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Azure.Core.dll
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Azure.Identity.dll
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Humanizer.dll
+E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.Internal.dll
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
@@ -82,5 +84,3 @@ E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\refint\MeterReaderAPI
 E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\MeterReaderAPI.pdb
 E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\MeterReaderAPI.genruntimeconfig.cache
 E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\ref\MeterReaderAPI.dll
-E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\libman.json
-E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
