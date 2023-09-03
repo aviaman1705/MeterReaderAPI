@@ -52,7 +52,9 @@ namespace MeterReaderAPI.Services
             dashboard.DashboardSummary.UnCalled = query.Sum(x => x.UnCalled);
             dashboard.DashboardSummary.MonthlyCalled = query.Where(x => x.Date.Year == DateTime.Now.Year && x.Date.Month == DateTime.Now.Month).Sum(x => x.Called);
             dashboard.DashboardSummary.MonthlyUnCalled = query.Where(x => x.Date.Year == DateTime.Now.Year && x.Date.Month == DateTime.Now.Month).Sum(x => x.UnCalled);
-            dashboard.DashboardSummary.MonthlyUncalledPercentage = Math.Round((double)(100 * dashboard.DashboardSummary.MonthlyUnCalled) / dashboard.DashboardSummary.MonthlyCalled, 2);
+
+            if (dashboard.DashboardSummary.MonthlyUnCalled > 0)
+                dashboard.DashboardSummary.MonthlyUncalledPercentage = Math.Round((double)(100 * dashboard.DashboardSummary.MonthlyUnCalled) / dashboard.DashboardSummary.MonthlyCalled, 2);
             dashboard.DashboardSummary.TotalUncalledPercentage = Math.Round((double)(100 * dashboard.DashboardSummary.UnCalled) / dashboard.DashboardSummary.Called, 2);
 
             dashboard.MonthlyData = query
