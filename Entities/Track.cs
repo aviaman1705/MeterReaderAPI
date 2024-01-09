@@ -15,10 +15,5 @@ namespace MeterReaderAPI.Entities
         public DateTime Date { get; set; }
 
         public DateTime CreatedDate { get; set; }
-
-        public int NotebookId { get; set; }
-
-        [ForeignKey("NotebookId")]
-        public virtual Notebook Notebook { get; set; }
     }
 }
