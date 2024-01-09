@@ -78,10 +78,11 @@ namespace MeterReaderAPI.Services
             if (track != null)
             {
                 track.Called = entity.Called;
-                track.UnCalled = entity.UnCalled;
-                track.Desc = entity.Desc;
-                track.Date = entity.Date;
                 track.CreatedDate = DateTime.Now;
+                track.Date = entity.Date;
+                track.Desc = entity.Desc;
+                track.NotebookId = entity.NotebookId;
+                track.UnCalled = entity.UnCalled;
 
                 _context.SaveChanges();
                 return true;

@@ -6,6 +6,7 @@ using MeterReaderAPI.Helpers;
 using MeterReaderAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.Xml.Linq;
@@ -25,7 +26,7 @@ namespace MeterReaderAPI.Controllers
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<SysDataTablePager<TrackGridItem>>> Get(int page, int itemPerPage, string sortColumn, string sortType, string? search)
+        public async Task<ActionResult<SysDataTablePager<TrackGridItem>>> Get(int page, int itemPerPage, string sortColumn, string sortDirection, string? search)
         {
             List<TrackGridItem> tracks = new List<TrackGridItem>();
             int totalItems = 0;
@@ -49,12 +50,12 @@ namespace MeterReaderAPI.Controllers
                            || m.UnCalled.ToString().Contains(search)).ToList();
 
                 totalItems = tracks.Count;
-                tracks = Sort(sortColumn, sortType, tracks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+                tracks = Sort(sortColumn, sortDirection, tracks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
             }
             else
             {
                 totalItems = tracks.Count;
-                tracks = Sort(sortColumn, sortType, tracks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+                tracks = Sort(sortColumn, sortDirection, tracks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
             }
             
             var tracksPaged = new SysDataTablePager<TrackGridItem>(tracks, totalItems, itemPerPage, page);
@@ -89,7 +90,7 @@ namespace MeterReaderAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult Put(int id, [FromForm] TrackDTO trackDTO)
+        public ActionResult Put(int id, [FromForm] EditTrackDTO trackDTO)
         {
             var track = repository.Get(id);
 
@@ -122,6 +123,12 @@ namespace MeterReaderAPI.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
+                    return BadRequest(allErrors);
+                }
+
                 var track = mapper.Map<Track>(trackCreationDTO);
                 repository.Add(track);              
                 return track.Id;

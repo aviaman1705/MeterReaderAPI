@@ -33,7 +33,7 @@ namespace MeterReaderAPI
                 var frontendURL = Configuration.GetValue<string>("frontend_url");
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.WithOrigins(frontendURL).AllowAnyMethod().AllowAnyHeader()
+                    builder.WithOrigins(frontendURL ?? "http://localhost:3000").AllowAnyMethod().AllowAnyHeader()
                     .WithExposedHeaders(new string[] { "totalAmountOfRcords" });
                 });
             });
@@ -48,7 +48,7 @@ namespace MeterReaderAPI
 
             services.AddScoped<ITrackRepository, TrackRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IStreetRepository, StreetRepository>();
+            services.AddScoped<INotebookRepository, NotebookRepository>();
 
             services.AddSwaggerGen(c =>
             {

@@ -30,12 +30,8 @@ namespace MeterReaderAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Number")
+                    b.Property<int>("Number")
                         .HasColumnType("int");
-
-                    b.Property<string>("StreetName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -80,10 +76,15 @@ namespace MeterReaderAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("NotebookId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UnCalled")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NotebookId");
 
                     b.ToTable("Tracks");
                 });
@@ -286,6 +287,17 @@ namespace MeterReaderAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("MeterReaderAPI.Entities.Track", b =>
+                {
+                    b.HasOne("MeterReaderAPI.Entities.Notebook", "Notebook")
+                        .WithMany("Tracks")
+                        .HasForeignKey("NotebookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notebook");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -335,6 +347,11 @@ namespace MeterReaderAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MeterReaderAPI.Entities.Notebook", b =>
+                {
+                    b.Navigation("Tracks");
                 });
 #pragma warning restore 612, 618
         }

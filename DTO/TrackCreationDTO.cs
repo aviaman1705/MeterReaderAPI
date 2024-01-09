@@ -4,6 +4,8 @@ namespace MeterReaderAPI.DTO
 {
     public class TrackCreationDTO
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage ="the field with name {0} is required")]
         [RegularExpression("([0-9]+)",ErrorMessage = "Please enter valid Number")]
         public int Called { get; set; }
@@ -20,5 +22,9 @@ namespace MeterReaderAPI.DTO
         public DateTime Date { get; set; }
 
         public DateTime CreatedDate { get; set; }
+
+        [Required(ErrorMessage = "the field with name {0} is required")]
+        [RegularExpression("([0-9999]+)", ErrorMessage = "Please enter valid Number")]
+        public int NotebookId { get; set; }
     }
 }

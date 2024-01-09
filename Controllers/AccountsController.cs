@@ -94,7 +94,7 @@ namespace MeterReaderAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
