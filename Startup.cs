@@ -48,7 +48,7 @@ namespace MeterReaderAPI
 
             services.AddScoped<ITrackRepository, TrackRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IStreetRepository, StreetRepository>();
+            services.AddScoped<INotebookRepository, NotebookRepository>();
 
             services.AddSwaggerGen(c =>
             {

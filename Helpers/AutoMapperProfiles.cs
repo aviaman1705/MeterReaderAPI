@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MeterReaderAPI.DTO;
+using MeterReaderAPI.DTO.Notebook;
 using MeterReaderAPI.DTO.Track;
 using MeterReaderAPI.Entities;
 
@@ -9,8 +10,13 @@ namespace MeterReaderAPI.Helpers
     {
         public AutoMapperProfiles()
         {
+            //track
             CreateMap<Track, TrackGridItem>();
-            CreateMap<Street, StreetDTO>().ReverseMap();
+            
+            //notebook
+            CreateMap<Notebook, NotebookDTO>().ReverseMap(); 
+            CreateMap<Notebook, AddNotebookDTO>().ReverseMap();
+
         }
         //public AutoMapperProfiles(GeometryFactory geometryFactory)
         //{
