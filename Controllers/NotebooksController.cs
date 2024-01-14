@@ -72,7 +72,7 @@ namespace MeterReaderAPI.Controllers
         [HttpGet("GetNotebooks")]
         public ActionResult<List<NotebookDTO>> GetNotebooks()
         {
-            var notebooks = repository.GetAll();
+            var notebooks = repository.GetAll().OrderBy(x => x.Number);
 
             if (notebooks == null)
             {
@@ -135,7 +135,7 @@ namespace MeterReaderAPI.Controllers
                     if (sortType == "desc")
                         return list.OrderByDescending(x => x.Number).ToList();
                     else
-                        return list.OrderBy(x => x.Number).ToList();       
+                        return list.OrderBy(x => x.Number).ToList();
                 default:
                     return list.OrderByDescending(x => x.Id).ToList();
             }
