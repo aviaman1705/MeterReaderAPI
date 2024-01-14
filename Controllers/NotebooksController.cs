@@ -69,6 +69,20 @@ namespace MeterReaderAPI.Controllers
             return dto;
         }
 
+        [HttpGet("GetNotebooks")]
+        public ActionResult<List<NotebookDTO>> GetNotebooks()
+        {
+            var notebooks = repository.GetAll();
+
+            if (notebooks == null)
+            {
+                return NotFound();
+            }
+
+            var model = mapper.Map<List<NotebookDTO>>(notebooks);
+            return model;
+        }
+
         [HttpPut("{id:int}")]
         public ActionResult Put(int id, [FromForm] NotebookDTO NotebookDTO)
         {
