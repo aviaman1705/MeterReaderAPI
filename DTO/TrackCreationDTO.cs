@@ -17,6 +17,10 @@ namespace MeterReaderAPI.DTO
         public string Desc { get; set; }
 
         [Required(ErrorMessage = "the field with name {0} is required")]
+        [RegularExpression("([0-9999]+)", ErrorMessage = "Please enter valid Number")]
+        public int NotebookId { get; set; }
+
+        [Required(ErrorMessage = "the field with name {0} is required")]
         public DateTime Date { get; set; }
 
         public DateTime CreatedDate { get; set; }

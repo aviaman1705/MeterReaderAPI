@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using MeterReaderAPI.DTO;
+using MeterReaderAPI.DTO.User;
 using MeterReaderAPI.Entities;
 using MeterReaderAPI.Helpers;
 using MeterReaderAPI.Services;
@@ -20,7 +22,7 @@ namespace MeterReaderAPI.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _repository;
-        
+
         private IMapper _mapper;
         private readonly ILogger<AccountsController> _logger;
 
@@ -34,18 +36,20 @@ namespace MeterReaderAPI.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _repository = repository;   
-            _configuration = configuration;            
+            _repository = repository;
+            _configuration = configuration;
             _mapper = mapper;
             _logger = logger;
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<AuthenticationResponse>> Create([FromBody] UserCredentials userCredentials)
+        public async Task<ActionResult<AuthenticationResponse>> Create([FromBody] RegisterDTO register)
         {
             try
             {
-                var user = new IdentityUser { UserName = userCredentials.Email, Email = userCredentials.Email };
+                var user = new IdentityUser { UserName = register.UserName, Email = register.Email };
+                var userCredentials = _mapper.Map<UserCredentials>(register);
+
                 var result = await _repository.Create(user, userCredentials);
 
                 if (result.Succeeded)
@@ -56,7 +60,7 @@ namespace MeterReaderAPI.Controllers
                 else
                 {
                     _logger.LogError(result.Errors.ToString());
-                    if(result.Errors.Count() == 0)
+                    if (result.Errors.Count() == 0)
                     {
                         List<string> customErrorsArr = new List<string>();
                         customErrorsArr.Add("Email: Email allready exsist");
