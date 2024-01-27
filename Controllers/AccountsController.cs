@@ -88,7 +88,9 @@ namespace MeterReaderAPI.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation($"${userCredentials.Email} is logged in");
-                    return await BuildToken(userCredentials);
+
+                    var currentUser =  _mapper.Map<LoginDTO>(await _repository.GetUser(userCredentials.Email));
+                    return await BuildToken(currentUser);
                 }
                 else
                 {
@@ -102,11 +104,12 @@ namespace MeterReaderAPI.Controllers
             }
         }
 
-        private async Task<AuthenticationResponse> BuildToken(UserCredentials userCredentials)
+        private async Task<AuthenticationResponse> BuildToken(LoginDTO userCredentials)
         {
             var claims = new List<Claim>()
             {
-                new Claim("email",userCredentials.Email)
+                new Claim("email",userCredentials.Email),
+                new Claim("username",userCredentials.UserName)
             };
 
             var user = await _userManager.FindByNameAsync(userCredentials.Email);

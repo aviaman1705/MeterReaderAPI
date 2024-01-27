@@ -2,6 +2,7 @@
 using MeterReaderAPI.DTO;
 using MeterReaderAPI.DTO.User;
 using MeterReaderAPI.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace MeterReaderAPI.Services
 {
@@ -23,6 +24,9 @@ namespace MeterReaderAPI.Services
 
             //User
             CreateMap<RegisterDTO,UserCredentials>().ReverseMap();
+            CreateMap<IdentityUser, LoginDTO>()
+                .ForMember(x => x.Email, dto => dto.MapFrom(prop => prop.Email))
+                .ForMember(x => x.UserName, dto => dto.MapFrom(prop => prop.UserName));
         }
     }
 }
