@@ -64,7 +64,8 @@ namespace MeterReaderAPI.Services
            {
                Date = $"{g.Key.Month}/{g.Key.Year}",
                Called = g.Sum(x => x.Called),
-               UnCalled = g.Sum(x => x.UnCalled)
+               UnCalled = g.Sum(x => x.UnCalled),
+               Percentage = Math.Round((double)(100 * g.Sum(x => x.UnCalled)) / g.Sum(x => x.Called), 2)
            })
            .ToList();
 
