@@ -1,4 +1,6 @@
-﻿namespace MeterReaderAPI.DTO
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MeterReaderAPI.DTO
 {
     public class TrackDTO
     {
@@ -9,6 +11,8 @@
         public int UnCalled { get; set; }
 
         public string Desc { get; set; }
+
+        public int NotebookId { get; set; }
 
         public DateTime Date { get; set; }
 
