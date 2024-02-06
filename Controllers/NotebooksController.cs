@@ -67,11 +67,21 @@ namespace MeterReaderAPI.Controllers
             return dto;
         }
 
-        [HttpGet("GetNotebookByNumber/{number:int}")]
-        public ActionResult<bool> GetNotebookByNumber(int number)
+        [HttpGet("GetNotebookByNumber/{number:int}/{id?}")]
+        public ActionResult<bool> GetNotebookByNumber(int number, int id = 0)
         {
-            var Notebook = repository.GetAll().FirstOrDefault(m => m.Number == number);
-            if (Notebook == null)
+            Notebook? notebook;
+
+            if (id > 0)
+            {
+                notebook = repository.GetAll().Where(m => m.Number == number && m.Id != id).FirstOrDefault();
+            }
+            else
+            {
+                notebook = repository.GetAll().Where(m => m.Number == number).FirstOrDefault();
+            }
+
+            if (notebook == null)
             {
                 return false;
             }
