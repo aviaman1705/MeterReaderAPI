@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using MeterReaderAPI.DTO.Notebook;
-using MeterReaderAPI.DTO;
 using MeterReaderAPI.Entities;
 using MeterReaderAPI.Helpers;
 using MeterReaderAPI.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -67,6 +65,18 @@ namespace MeterReaderAPI.Controllers
 
             var dto = mapper.Map<NotebookDTO>(Notebook);
             return dto;
+        }
+
+        [HttpGet("GetNotebookByNumber/{number:int}")]
+        public ActionResult<bool> GetNotebookByNumber(int number)
+        {
+            var Notebook = repository.GetAll().FirstOrDefault(m => m.Number == number);
+            if (Notebook == null)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         [HttpGet("GetNotebooks")]
