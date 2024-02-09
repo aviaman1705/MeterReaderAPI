@@ -1,4 +1,5 @@
 ﻿using MeterReaderAPI.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeterReaderAPI.Services
 {
@@ -32,7 +33,7 @@ namespace MeterReaderAPI.Services
 
         public Notebook Get(int id)
         {
-            return _context.Notebooks.FirstOrDefault(x => x.Id == id);
+            return _context.Notebooks.Include(x => x.Tracks).FirstOrDefault(x => x.Id == id);
         }
 
         public IQueryable<Notebook> GetAll()
@@ -46,7 +47,7 @@ namespace MeterReaderAPI.Services
 
             if (notebook != null)
             {
-                notebook.Number = entity.Number;          
+                notebook.Number = entity.Number;
 
                 _context.SaveChanges();
                 return true;

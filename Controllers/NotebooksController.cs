@@ -123,13 +123,18 @@ namespace MeterReaderAPI.Controllers
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            bool isDeleted = repository.Delete(id);
-
-            if (isDeleted)
+            Notebook notebookToDelete = repository.Get(id);
+            if(notebookToDelete.Tracks.Count == 0)
             {
-                return NoContent();
+                bool isDeleted = repository.Delete(id);
+
+                if (isDeleted)
+                {
+                    return NoContent();
+                }
             }
-            return NotFound();
+
+            return BadRequest("לא ניתן למחוק פנקס שמשוייכים אליו מסלולים.");
         }
 
         [HttpPost]
