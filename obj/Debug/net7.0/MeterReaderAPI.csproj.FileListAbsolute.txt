@@ -46,6 +46,7 @@ E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Microsoft.OpenApi.dll
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Microsoft.SqlServer.Server.dll
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Microsoft.Win32.SystemEvents.dll
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Mono.TextTemplating.dll
+E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Newtonsoft.Json.dll
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Swashbuckle.AspNetCore.Swagger.dll
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 E:\projects\MeterReaderAPI\MeterReaderAPI\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerUI.dll

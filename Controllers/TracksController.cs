@@ -2,6 +2,7 @@
 using MeterReaderAPI.DTO;
 using MeterReaderAPI.DTO.Track;
 using MeterReaderAPI.Entities;
+using MeterReaderAPI.Filters;
 using MeterReaderAPI.Helpers;
 using MeterReaderAPI.Services;
 using Microsoft.AspNetCore.Http;
@@ -18,103 +19,158 @@ namespace MeterReaderAPI.Controllers
     {
         private readonly ITrackRepository repository;
         private readonly IMapper mapper;
-        public TracksController(ApplicationDbContext context, ITrackRepository repository, IMapper mapper)
+        private readonly ILogger<TracksController> logger;
+        public TracksController(ApplicationDbContext context, ITrackRepository repository, IMapper mapper, ILogger<TracksController> logger)
         {
             this.repository = repository;
             this.mapper = mapper;
+            this.logger = logger;
         }
 
         [HttpGet("")]
         public async Task<ActionResult<SysDataTablePager<TrackGridItem>>> Get(int page, int itemPerPage, string sortColumn, string sortType, string? search)
         {
-            List<TrackGridItem> tracks = new List<TrackGridItem>();
-            int totalItems = 0;
 
-            //1 טעינת האייטמים ממסד הנתונים
-            var queryable = repository.GetAll();
-
-            //2 מעדכן סה"כ אייטמים בהאדר הבקשה
-            await HttpContext.InsertParametersPagintionInHelper(queryable);
-
-            //המרת השאילתה למערך 3  
-            tracks = mapper.Map<List<TrackGridItem>>(await queryable.ToListAsync());
-
-            //4 בדיקה אם הוזן טקסט בשה חיפוש
-            if (!string.IsNullOrEmpty(search))
+            try
             {
-                tracks = tracks
-                      .Where(m => m.Called.ToString().Contains(search)
-                           || m.Date.ToString("dd/MM/yyyy").Contains(search)
-                           || m.Desc.Contains(search)
-                           || m.UnCalled.ToString().Contains(search)).ToList();
+                logger.LogInformation($"Get tracks list");
+                List<TrackGridItem> tracks = new List<TrackGridItem>();
+                int totalItems = 0;
 
-                totalItems = tracks.Count;
-                tracks = Sort(sortColumn, sortType, tracks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+                //1 טעינת האייטמים ממסד הנתונים
+                var queryable = repository.GetAll();
+
+                //2 מעדכן סה"כ אייטמים בהאדר הבקשה
+                await HttpContext.InsertParametersPagintionInHelper(queryable);
+
+                //המרת השאילתה למערך 3  
+                tracks = mapper.Map<List<TrackGridItem>>(await queryable.ToListAsync());
+
+                //4 בדיקה אם הוזן טקסט בשה חיפוש
+                if (!string.IsNullOrEmpty(search))
+                {
+                    tracks = tracks
+                          .Where(m => m.Called.ToString().Contains(search)
+                               || m.Date.ToString("dd/MM/yyyy").Contains(search)
+                               || m.Desc.Contains(search)
+                               || m.UnCalled.ToString().Contains(search)).ToList();
+
+                    totalItems = tracks.Count;
+                    tracks = Sort(sortColumn, sortType, tracks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+                }
+                else
+                {
+                    totalItems = tracks.Count;
+                    tracks = Sort(sortColumn, sortType, tracks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+                }
+
+                var tracksPaged = new SysDataTablePager<TrackGridItem>(tracks, totalItems, itemPerPage, page);
+                logger.LogInformation($"Tracks list retrived");
+                return tracksPaged;
             }
-            else
+            catch (Exception ex)
             {
-                totalItems = tracks.Count;
-                tracks = Sort(sortColumn, sortType, tracks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+                logger.LogError(ex, ex.Message);
+                return BadRequest();
             }
-            
-            var tracksPaged = new SysDataTablePager<TrackGridItem>(tracks, totalItems, itemPerPage, page);
-            return tracksPaged;
         }
 
         [HttpGet("{id:int}")]
         public ActionResult<TrackDTO> Get(int id)
         {
-            var track = repository.Get(id);
-
-            if (track == null)
+            try
             {
-                return NotFound();
-            }
+                logger.LogInformation($"Get track by id {id}");
+                var track = repository.Get(id);
 
-            var dto = mapper.Map<TrackDTO>(track);
-            return dto;
+                if (track == null)
+                {
+                    logger.LogInformation($"Track not found");
+                    return NotFound();
+                }
+
+                var dto = mapper.Map<TrackDTO>(track);
+                logger.LogInformation($"Track {id} retrived");
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                return BadRequest();
+            }
         }
+
         [HttpGet("GetDashboardData")]
         public ActionResult<DashboardDTO> GetDashboardData()
         {
-            var dashboardData = repository.GetDashboardData();
-
-            if (dashboardData == null)
+            try
             {
-                return NotFound();
-            }
+                logger.LogInformation($"Get dashboard data");
+                var dashboardData = repository.GetDashboardData();
 
-            var model = mapper.Map<DashboardDTO>(dashboardData);
-            return model;
+                if (dashboardData == null)
+                {
+                    logger.LogInformation($"Dashboard data not found");
+                    return NotFound();
+                }
+
+                var model = mapper.Map<DashboardDTO>(dashboardData);
+                return model;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                return BadRequest();
+            }
         }
 
         [HttpPut("{id:int}")]
         public ActionResult Put(int id, [FromForm] TrackDTO trackDTO)
         {
-            var track = repository.Get(id);
-
-            if (track == null)
+            try
             {
-                return NotFound();
+                logger.LogInformation($"Get track {id} for update");
+                var track = repository.Get(id);
 
+                if (track == null)
+                {
+                    logger.LogInformation($"Track {id} not found");
+                    return NotFound();
+                }
+
+                track = mapper.Map<Track>(trackDTO);
+
+                repository.Update(track);
+                return NoContent();
             }
-
-            track = mapper.Map<Track>(trackDTO);
-
-            repository.Update(track);
-            return NoContent();
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                return BadRequest();
+            }
         }
 
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            bool isDeleted = repository.Delete(id);
-
-            if (isDeleted)
+            try
             {
-                return NoContent();
+                bool isDeleted = repository.Delete(id);
+
+                if (isDeleted)
+                {
+                    logger.LogInformation($"Track {id} deleted");
+                    return NoContent();
+                }
+
+                logger.LogInformation($"Track {id} not found");
+                return NotFound();
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                return BadRequest();
+            }
         }
 
         [HttpPost]
@@ -123,11 +179,13 @@ namespace MeterReaderAPI.Controllers
             try
             {
                 var track = mapper.Map<Track>(trackCreationDTO);
-                repository.Add(track);              
+                repository.Add(track);
+                logger.LogInformation($"Track {track.Id}was created");
                 return track.Id;
             }
             catch (Exception ex)
             {
+                logger.LogError(ex, ex.Message);
                 return BadRequest(ex.Message);
             }
         }

@@ -42,13 +42,13 @@ namespace MeterReaderAPI
 
             services.AddControllers(options =>
             {
-                options.Filters.Add(typeof(MyExceptionFilter));
+                //options.Filters.Add(typeof(MyExceptionFilter));
                 options.Filters.Add(typeof(ParseBadRequest));
             }).ConfigureApiBehaviorOptions(BadRequestsBehavior.Parse);
 
             services.AddScoped<ITrackRepository, TrackRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<INotebookRepository, NotebookRepository>();
+            services.AddScoped<INotebookRepository, NotebookRepository>();            
 
             services.AddSwaggerGen(c =>
             {

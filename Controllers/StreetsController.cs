@@ -7,6 +7,7 @@ using MeterReaderAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace MeterReaderAPI.Controllers
 {
@@ -16,10 +17,12 @@ namespace MeterReaderAPI.Controllers
     {
         private readonly IStreetRepository repository;
         private readonly IMapper mapper;
-        public StreetsController(ApplicationDbContext context, IStreetRepository repository, IMapper mapper)
+        private readonly ILogger<StreetsController> logger;
+        public StreetsController(ApplicationDbContext context, IStreetRepository repository, IMapper mapper, ILogger<StreetsController> logger)
         {
             this.repository = repository;
             this.mapper = mapper;
+            this.logger = logger;   
         }
 
         [HttpGet("")]
@@ -27,6 +30,7 @@ namespace MeterReaderAPI.Controllers
         {
             try
             {
+                logger.LogInformation($"Get streets list");
                 List<StreetDTO> streets = new List<StreetDTO>();
                 int totalItems = 0;
 
@@ -49,10 +53,12 @@ namespace MeterReaderAPI.Controllers
                 }
 
                 var streetsPaged = new SysDataTablePager<StreetDTO>(streets, totalItems, itemPerPage, page);
+                logger.LogInformation($"Streets list retrived");
                 return streetsPaged;
             }
             catch (Exception ex)
             {
+                logger.LogError(ex, ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -70,78 +76,5 @@ namespace MeterReaderAPI.Controllers
                     return list.OrderByDescending(x => x.Id).ToList();
             }
         }
-
-        //[HttpGet("{id:int}")]
-        //public ActionResult<TrackDTO> Get(int id)
-        //{
-        //    var track = repository.Get(id);
-
-        //    if (track == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var dto = mapper.Map<TrackDTO>(track);
-        //    return dto;
-        //}
-        //[HttpGet("GetDashboardData")]
-        //public ActionResult<DashboardDTO> GetDashboardData()
-        //{
-        //    var dashboardData = repository.GetDashboardData();
-
-        //    if (dashboardData == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var model = mapper.Map<DashboardDTO>(dashboardData);
-        //    return model;
-        //}
-
-        //[HttpPut("{id:int}")]
-        //public ActionResult Put(int id, [FromForm] TrackDTO trackDTO)
-        //{
-        //    var track = repository.Get(id);
-
-        //    if (track == null)
-        //    {
-        //        return NotFound();
-
-        //    }
-
-        //    track = mapper.Map<Track>(trackDTO);
-
-        //    repository.Update(track);
-        //    return NoContent();
-        //}
-
-        //[HttpDelete("{id:int}")]
-        //public ActionResult Delete(int id)
-        //{
-        //    bool isDeleted = repository.Delete(id);
-
-        //    if (isDeleted)
-        //    {
-        //        return NoContent();
-        //    }
-        //    return NotFound();
-        //}
-
-        //[HttpPost]
-        //public async Task<ActionResult<int>> Post([FromForm] TrackCreationDTO trackCreationDTO)
-        //{
-        //    try
-        //    {
-        //        var track = mapper.Map<Track>(trackCreationDTO);
-        //        repository.Add(track);
-        //        return track.Id;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-
-
     }
 }

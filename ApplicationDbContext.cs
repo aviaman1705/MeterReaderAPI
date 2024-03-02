@@ -14,5 +14,6 @@ namespace MeterReaderAPI
         public DbSet<Notebook> Notebooks { get; set; }
         public DbSet<Track> Tracks { get; set; }
         public DbSet<Street> Streets { get; set; }
+        public DbSet<Error> Errors { get; set; }
     }
 }

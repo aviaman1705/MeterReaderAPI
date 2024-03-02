@@ -4,6 +4,7 @@ using MeterReaderAPI.Helpers;
 using MeterReaderAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace MeterReaderAPI.Controllers
 {
@@ -13,24 +14,36 @@ namespace MeterReaderAPI.Controllers
     {
         private readonly ITrackRepository repository;
         private readonly IMapper mapper;
+        private readonly ILogger<SearchController> logger;
 
-        public SearchController(ITrackRepository repository, IMapper mapper)
+        public SearchController(ITrackRepository repository, IMapper mapper, ILogger<SearchController> logger)
         {
             this.repository = repository;
             this.mapper = mapper;
+            this.logger = logger;   
         }
 
         [HttpGet]
         public async Task<ActionResult<SysDataTablePager<SearchDTO>>> Get(int page, int itemPerPage, string term)
         {
-            var queryable = repository.GetAll();
-            var searchResults = mapper.Map<List<SearchDTO>>(await queryable.Where(x => x.Desc.Contains(term)).ToListAsync());
-          
-            int totalItems = searchResults.Count;
-            searchResults = searchResults.Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+            try
+            {
+                var queryable = repository.GetAll();
+                var searchResults = mapper.Map<List<SearchDTO>>(await queryable.Where(x => x.Desc.Contains(term)).ToListAsync());
 
-            var searchResultPaged = new SysDataTablePager<SearchDTO>(searchResults, totalItems, itemPerPage, page);
-            return searchResultPaged;
+                int totalItems = searchResults.Count;
+                searchResults = searchResults.Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+
+                var searchResultPaged = new SysDataTablePager<SearchDTO>(searchResults, totalItems, itemPerPage, page);
+                logger.LogInformation($"Searches list retrived");
+                return searchResultPaged;
+
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                return BadRequest();
+            }
         }
     }
 }

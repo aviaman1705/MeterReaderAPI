@@ -82,12 +82,12 @@ namespace MeterReaderAPI.Controllers
         {
             try
             {
-                _logger.LogInformation($"Creating ${userCredentials.Email} as new year");
+                _logger.LogInformation($"Creating {userCredentials.Email} trying to log in");
                 var result = await _repository.Login(userCredentials.Email, userCredentials.Password);
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation($"${userCredentials.Email} is logged in");
+                    _logger.LogInformation($"{userCredentials.Email} is logged in");
 
                     var currentUser =  _mapper.Map<LoginDTO>(await _repository.GetUser(userCredentials.Email));
                     return await BuildToken(currentUser);
