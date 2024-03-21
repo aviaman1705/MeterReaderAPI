@@ -8,6 +8,8 @@
 
         public int UnCalled { get; set; }
 
+        public int NotebookNumber { get; set; }
+
         public string Desc { get; set; }
 
         public DateTime Date { get; set; }

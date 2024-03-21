@@ -40,7 +40,7 @@ namespace MeterReaderAPI.Services
 
         public IQueryable<Track> GetAll()
         {
-            return _context.Tracks;
+            return _context.Tracks.Include(x => x.Notebook);
         }
 
         public Dashboard GetDashboardData()

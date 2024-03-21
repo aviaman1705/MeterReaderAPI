@@ -6,15 +6,17 @@ using MeterReaderAPI.Entities;
 
 namespace MeterReaderAPI.Helpers
 {
-    public class AutoMapperProfiles:Profile
+    public class AutoMapperProfiles : Profile
     {
         public AutoMapperProfiles()
         {
             //track
-            CreateMap<Track, TrackGridItem>();
-            
+            CreateMap<Track, TrackGridItem>()
+                .ForMember(x => x.NotebookNumber, dto => dto.MapFrom(prop => prop.Notebook.Number));
+
             //notebook
-            CreateMap<Notebook, NotebookDTO>().ReverseMap(); 
+            CreateMap<Notebook, NotebookDTO>().ReverseMap();
+
             CreateMap<Notebook, AddNotebookDTO>().ReverseMap();
 
         }
