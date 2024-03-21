@@ -51,6 +51,7 @@ namespace MeterReaderAPI.Controllers
                 {
                     tracks = tracks
                           .Where(m => m.Called.ToString().Contains(search)
+                               || m.NotebookNumber.ToString().Contains(search)
                                || m.Date.ToString("dd/MM/yyyy").Contains(search)
                                || m.Desc.Contains(search)
                                || m.UnCalled.ToString().Contains(search)).ToList();
@@ -199,6 +200,11 @@ namespace MeterReaderAPI.Controllers
                         return list.OrderByDescending(x => x.Date).ToList();
                     else
                         return list.OrderBy(x => x.Date).ToList();
+                case "notebookNumber":
+                    if (sortType == "desc")
+                        return list.OrderByDescending(x => x.NotebookNumber).ToList();
+                    else
+                        return list.OrderBy(x => x.NotebookNumber).ToList();
                 case "desc":
                     if (sortType == "desc")
                         return list.OrderByDescending(x => x.Desc).ToList();
