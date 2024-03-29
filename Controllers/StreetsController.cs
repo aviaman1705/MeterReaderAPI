@@ -26,7 +26,7 @@ namespace MeterReaderAPI.Controllers
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<SysDataTablePager<StreetDTO>>> Get(int page, int itemPerPage, string sortColumn, string sortType, string? search)
+        public async Task<ActionResult<SysDataTablePager<StreetDTO>>> Get(int page, int itemsPerPage, string sortColumn, string sortType, string? search)
         {
             try
             {
@@ -44,15 +44,15 @@ namespace MeterReaderAPI.Controllers
                           .Where(m => m.Title.ToString().Contains(search)).ToList();
 
                     totalItems = streets.Count;
-                    streets = Sort(sortColumn, sortType, streets).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+                    streets = Sort(sortColumn, sortType, streets).Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList();
                 }
                 else
                 {
                     totalItems = streets.Count;
-                    streets = Sort(sortColumn, sortType, streets).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+                    streets = Sort(sortColumn, sortType, streets).Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList();
                 }
 
-                var streetsPaged = new SysDataTablePager<StreetDTO>(streets, totalItems, itemPerPage, page);
+                var streetsPaged = new SysDataTablePager<StreetDTO>(streets, totalItems, itemsPerPage, page);
                 logger.LogInformation($"Streets list retrived");
                 return streetsPaged;
             }

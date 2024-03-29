@@ -23,7 +23,7 @@ namespace MeterReaderAPI.Controllers
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<SysDataTablePager<NotebookDTO>>> Get(int page, int itemPerPage, string sortColumn, string sortType, string? search)
+        public async Task<ActionResult<SysDataTablePager<NotebookDTO>>> Get(int page, int itemsPerPage, string sortColumn, string sortType, string? search)
         {
             try
             {
@@ -46,15 +46,15 @@ namespace MeterReaderAPI.Controllers
                     Notebooks = Notebooks.Where(m => m.Number.ToString().Contains(search)).ToList();
 
                     totalItems = Notebooks.Count;
-                    Notebooks = Sort(sortColumn, sortType, Notebooks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+                    Notebooks = Sort(sortColumn, sortType, Notebooks).Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList();
                 }
                 else
                 {
                     totalItems = Notebooks.Count;
-                    Notebooks = Sort(sortColumn, sortType, Notebooks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+                    Notebooks = Sort(sortColumn, sortType, Notebooks).Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList();
                 }
 
-                var NotebooksPaged = new SysDataTablePager<NotebookDTO>(Notebooks, totalItems, itemPerPage, page);
+                var NotebooksPaged = new SysDataTablePager<NotebookDTO>(Notebooks, totalItems, itemsPerPage, page);
                 logger.LogInformation($"Notebooks list retrived");
                 return NotebooksPaged;
             }

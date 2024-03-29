@@ -24,7 +24,7 @@ namespace MeterReaderAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<SysDataTablePager<SearchDTO>>> Get(int page, int itemPerPage, string term)
+        public async Task<ActionResult<SysDataTablePager<SearchDTO>>> Get(int page, int itemsPerPage, string term)
         {
             try
             {
@@ -32,9 +32,9 @@ namespace MeterReaderAPI.Controllers
                 var searchResults = mapper.Map<List<SearchDTO>>(await queryable.Where(x => x.Desc.Contains(term)).ToListAsync());
 
                 int totalItems = searchResults.Count;
-                searchResults = searchResults.Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+                searchResults = searchResults.Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList();
 
-                var searchResultPaged = new SysDataTablePager<SearchDTO>(searchResults, totalItems, itemPerPage, page);
+                var searchResultPaged = new SysDataTablePager<SearchDTO>(searchResults, totalItems, itemsPerPage, page);
                 logger.LogInformation($"Searches list retrived");
                 return searchResultPaged;
 

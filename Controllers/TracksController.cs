@@ -28,7 +28,7 @@ namespace MeterReaderAPI.Controllers
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<SysDataTablePager<TrackGridItem>>> Get(int page, int itemPerPage, string sortColumn, string sortType, string? search)
+        public async Task<ActionResult<SysDataTablePager<TrackGridItem>>> Get(int page, int itemsPerPage, string sortColumn, string sortType, string? search)
         {
 
             try
@@ -57,15 +57,15 @@ namespace MeterReaderAPI.Controllers
                                || m.UnCalled.ToString().Contains(search)).ToList();
 
                     totalItems = tracks.Count;
-                    tracks = Sort(sortColumn, sortType, tracks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+                    tracks = Sort(sortColumn, sortType, tracks).Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList();
                 }
                 else
                 {
                     totalItems = tracks.Count;
-                    tracks = Sort(sortColumn, sortType, tracks).Skip((page - 1) * itemPerPage).Take(itemPerPage).ToList();
+                    tracks = Sort(sortColumn, sortType, tracks).Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList();
                 }
 
-                var tracksPaged = new SysDataTablePager<TrackGridItem>(tracks, totalItems, itemPerPage, page);
+                var tracksPaged = new SysDataTablePager<TrackGridItem>(tracks, totalItems, itemsPerPage, page);
                 logger.LogInformation($"Tracks list retrived");
                 return tracksPaged;
             }
