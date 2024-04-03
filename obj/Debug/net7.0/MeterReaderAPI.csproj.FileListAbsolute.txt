@@ -79,9 +79,10 @@ E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\staticwebassets.pack.
 E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\staticwebassets.build.json
 E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\staticwebassets.development.json
 E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\scopedcss\bundle\MeterReaderAPI.styles.css
-E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\MeterReaderAPI.csproj.CopyComplete
 E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\MeterReaderAPI.dll
 E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\refint\MeterReaderAPI.dll
 E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\MeterReaderAPI.pdb
 E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\MeterReaderAPI.genruntimeconfig.cache
 E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\ref\MeterReaderAPI.dll
+E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\MeterReaderAPI.sourcelink.json
+E:\projects\MeterReaderAPI\MeterReaderAPI\obj\Debug\net7.0\MeterRea.258BBCE5.Up2Date

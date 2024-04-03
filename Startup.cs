@@ -30,10 +30,10 @@ namespace MeterReaderAPI
 
             services.AddCors(options =>
             {
-                var frontendURL = Configuration.GetValue<string>("frontend_url");
+                var frontendURLArray = Configuration.GetValue<string>("frontend_url").Split(',');
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.WithOrigins(frontendURL).AllowAnyMethod().AllowAnyHeader()
+                    builder.WithOrigins(frontendURLArray).AllowAnyMethod().AllowAnyHeader()
                     .WithExposedHeaders(new string[] { "totalAmountOfRcords" });
                 });
             });

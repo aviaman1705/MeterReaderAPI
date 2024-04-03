@@ -15,7 +15,7 @@ namespace MeterReaderAPI.Controllers
         private readonly INotebookRepository repository;
         private readonly IMapper mapper;
         private readonly ILogger<NotebooksController> logger;
-        public NotebooksController(ApplicationDbContext context, INotebookRepository repository, IMapper mapper,ILogger <NotebooksController> logger)
+        public NotebooksController(ApplicationDbContext context, INotebookRepository repository, IMapper mapper, ILogger<NotebooksController> logger)
         {
             this.repository = repository;
             this.mapper = mapper;
@@ -148,10 +148,16 @@ namespace MeterReaderAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult Put(int id, [FromForm] NotebookDTO NotebookDTO)
+        public ActionResult Put(int id, [FromForm] NotebookDTO model)
         {
             try
             {
+                logger.LogInformation($"Check if notebook number {model.Number} with id {id} allready esxist");
+                if (repository.GetAll().Any(x => x.Number == model.Number && x.Id != model.Id))
+                {
+                    return BadRequest("מספר פנקס כבר קיים.");
+                }
+
                 logger.LogInformation($"Get notebook {id} for update");
                 var Notebook = repository.Get(id);
 
@@ -161,7 +167,7 @@ namespace MeterReaderAPI.Controllers
                     return NotFound();
                 }
 
-                Notebook = mapper.Map<Notebook>(NotebookDTO);
+                Notebook = mapper.Map<Notebook>(model);
 
                 repository.Update(Notebook);
                 return NoContent();
