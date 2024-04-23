@@ -52,7 +52,7 @@ namespace MeterReaderAPI.Controllers
                 var userAllreadyExist = await _repository.GetUser(register.Email);
                 if (userAllreadyExist != null)
                 {
-                    return BadRequest("מייל כבר קיים במערכת.");
+                    return BadRequest($"Email {register.Email} is already exsist.");
                 }
                 else
                 {
