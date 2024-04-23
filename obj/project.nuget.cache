@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "bQOawjYi0x466kytfUkkDk4JT3RGefEGgSLN+uJiuZLfXIogruEDzokL3m/bjVP+D0hstBr98a/ygXqWqB+uxQ==",
+  "dgSpecHash": "gLUaMZ77qCopAmnDWOqNKN7wRUxDTnOCCVv9OMhkcF9IixG+kINiTou91Xk+xju9J80bxztC2VSmuJQoqVYOtg==",
   "success": true,
   "projectFilePath": "E:\\projects\\MeterReaderAPI\\MeterReaderAPI\\MeterReaderAPI.csproj",
   "expectedPackageFiles": [
@@ -88,5 +88,12 @@
     "C:\\Users\\aviam\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\aviam\\.nuget\\packages\\system.windows.extensions\\5.0.0\\system.windows.extensions.5.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1803",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "You are running the 'restore' operation with an 'HTTP' source, 'http://nuget.grapecity.com/nuget'. Non-HTTPS access will be removed in a future version. Consider migrating to an 'HTTPS' source."
+    }
+  ]
 }

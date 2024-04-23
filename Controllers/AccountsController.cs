@@ -48,27 +48,28 @@ namespace MeterReaderAPI.Controllers
             try
             {
                 var user = new IdentityUser { UserName = register.UserName, Email = register.Email };
-                var userCredentials = _mapper.Map<UserCredentials>(register);
 
-                var result = await _repository.Create(user, userCredentials);
-
-                if (result.Succeeded)
+                var userAllreadyExist = await _repository.GetUser(register.Email);
+                if (userAllreadyExist != null)
                 {
-                    _logger.LogInformation($"Creating ${userCredentials.Email} as new year");
-                    return Ok();
+                    return BadRequest("מייל כבר קיים במערכת.");
                 }
                 else
                 {
-                    _logger.LogError(result.Errors.ToString());
-                    if (result.Errors.Count() == 0)
-                    {
-                        List<string> customErrorsArr = new List<string>();
-                        customErrorsArr.Add("Email: Email allready exsist");
-                        return BadRequest(customErrorsArr);
-                    }
+                    var result = await _repository.Create(user, register.Password);
 
-                    return BadRequest(result.Errors);
+                    if (result.Succeeded)
+                    {
+                        _logger.LogInformation($"Creating ${register.Email} as new user");
+                        return Ok();
+                    }
+                    else
+                    {
+                        _logger.LogError(result.Errors.ToString());
+                        return BadRequest(result.Errors);
+                    }
                 }
+
             }
             catch (Exception ex)
             {
@@ -89,7 +90,7 @@ namespace MeterReaderAPI.Controllers
                 {
                     _logger.LogInformation($"{userCredentials.Email} is logged in");
 
-                    var currentUser =  _mapper.Map<LoginDTO>(await _repository.GetUser(userCredentials.Email));
+                    var currentUser = _mapper.Map<LoginDTO>(await _repository.GetUser(userCredentials.Email));
                     return await BuildToken(currentUser);
                 }
                 else
@@ -113,6 +114,7 @@ namespace MeterReaderAPI.Controllers
             };
 
             var user = await _userManager.FindByNameAsync(userCredentials.Email);
+
             var claimsDB = await _userManager.GetClaimsAsync(user);
 
             claims.AddRange(claimsDB);

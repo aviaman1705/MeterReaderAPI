@@ -11,9 +11,9 @@ namespace MeterReaderAPI.Services
             _userManager = userManager;
             _signInManager = signInManager;
         }
-        public async Task<IdentityResult> Create(IdentityUser user, UserCredentials userCredentials)
+        public async Task<IdentityResult> Create(IdentityUser user, string password)
         {
-            var result = await _userManager.CreateAsync(user, userCredentials.Password);
+            var result = await _userManager.CreateAsync(user, password);
             return result;
         }
 

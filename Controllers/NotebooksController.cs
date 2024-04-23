@@ -207,7 +207,9 @@ namespace MeterReaderAPI.Controllers
         }
 
         [HttpPost]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<ActionResult<int>> Post([FromForm] AddNotebookDTO notebookDTO)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             try
             {

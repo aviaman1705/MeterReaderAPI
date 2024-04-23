@@ -24,6 +24,7 @@ namespace MeterReaderAPI.Services
         {
             bool isDeleted = false;
             Track entity = _context.Tracks.FirstOrDefault(p => p.Id == id);
+
             if (entity != null)
             {
                 _context.Tracks.Remove(entity);

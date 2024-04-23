@@ -6,7 +6,7 @@ namespace MeterReaderAPI.Services
 {
     public interface IUserRepository
     {
-        Task<IdentityResult> Create(IdentityUser user, UserCredentials userCredentials);
+        Task<IdentityResult> Create(IdentityUser user,string password);
         Task<Microsoft.AspNetCore.Identity.SignInResult> Login(string email, string password);
         Task<IdentityUser> GetUser(string email);
     }
