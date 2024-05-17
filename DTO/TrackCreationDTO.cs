@@ -21,7 +21,10 @@ namespace MeterReaderAPI.DTO
         public int NotebookId { get; set; }
 
         [Required(ErrorMessage = "the field with name {0} is required")]
-        public DateTime Date { get; set; }
+        public DateTime FromDate { get; set; }
+
+        [Required(ErrorMessage = "the field with name {0} is required")]
+        public DateTime ToDate { get; set; }
 
         public DateTime CreatedDate { get; set; }
     }

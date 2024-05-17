@@ -23,7 +23,7 @@ namespace MeterReaderAPI.Services
         public bool Delete(int id)
         {
             bool isDeleted = false;
-            Track entity = _context.Tracks.FirstOrDefault(p => p.Id == id);
+            Track? entity = _context.Tracks.FirstOrDefault(p => p.Id == id);
 
             if (entity != null)
             {
@@ -36,7 +36,8 @@ namespace MeterReaderAPI.Services
 
         public Track Get(int id)
         {
-            return _context.Tracks.FirstOrDefault(x => x.Id == id);
+            Track? track = _context.Tracks.FirstOrDefault(x => x.Id == id);
+            return track;
         }
 
         public IQueryable<Track> GetAll()
@@ -51,16 +52,16 @@ namespace MeterReaderAPI.Services
 
             dashboard.DashboardSummary.Called = query.Sum(x => x.Called);
             dashboard.DashboardSummary.UnCalled = query.Sum(x => x.UnCalled);
-            dashboard.DashboardSummary.MonthlyCalled = query.Where(x => x.Date.Year == DateTime.Now.Year && x.Date.Month == DateTime.Now.Month).Sum(x => x.Called);
-            dashboard.DashboardSummary.MonthlyUnCalled = query.Where(x => x.Date.Year == DateTime.Now.Year && x.Date.Month == DateTime.Now.Month).Sum(x => x.UnCalled);
+            dashboard.DashboardSummary.MonthlyCalled = query.Where(x => x.FromDate.Year == DateTime.Now.Year && x.FromDate.Month == DateTime.Now.Month).Sum(x => x.Called);
+            dashboard.DashboardSummary.MonthlyUnCalled = query.Where(x => x.FromDate.Year == DateTime.Now.Year && x.FromDate.Month == DateTime.Now.Month).Sum(x => x.UnCalled);
 
             if (dashboard.DashboardSummary.MonthlyUnCalled > 0)
                 dashboard.DashboardSummary.MonthlyUncalledPercentage = Math.Round((double)(100 * dashboard.DashboardSummary.MonthlyUnCalled) / dashboard.DashboardSummary.MonthlyCalled, 2);
             dashboard.DashboardSummary.TotalUncalledPercentage = Math.Round((double)(100 * dashboard.DashboardSummary.UnCalled) / dashboard.DashboardSummary.Called, 2);
 
             dashboard.MonthlyData = query
-                .OrderBy(x => x.Date)
-                .GroupBy(x => new { x.Date.Month, x.Date.Year })
+                .OrderBy(x => x.FromDate)
+                .GroupBy(x => new { x.FromDate.Month, x.FromDate.Year })
            .Select(g => new MonthlyData()
            {
                Date = $"{g.Key.Month}/{g.Key.Year}",
@@ -82,7 +83,8 @@ namespace MeterReaderAPI.Services
                 track.Called = entity.Called;
                 track.UnCalled = entity.UnCalled;
                 track.Desc = entity.Desc;
-                track.Date = entity.Date;
+                track.FromDate = entity.FromDate;
+                track.ToDate = entity.ToDate;
                 track.CreatedDate = DateTime.Now;
 
                 _context.SaveChanges();

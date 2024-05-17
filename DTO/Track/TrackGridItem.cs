@@ -12,6 +12,8 @@
 
         public string Desc { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime FromDate { get; set; }
+
+        public DateTime ToDate { get; set; }
     }
 }

@@ -34,6 +34,7 @@ namespace MeterReaderAPI.Controllers
             try
             {
                 logger.LogInformation($"Get tracks list");
+
                 List<TrackGridItem> tracks = new List<TrackGridItem>();
                 int totalItems = 0;
 
@@ -52,7 +53,8 @@ namespace MeterReaderAPI.Controllers
                     tracks = tracks
                           .Where(m => m.Called.ToString().Contains(search)
                                || m.NotebookNumber.ToString().Contains(search)
-                               || m.Date.ToString("dd/MM/yyyy").Contains(search)
+                               || m.FromDate.ToString("dd/MM/yyyy").Contains(search)
+                               || m.ToDate.ToString("dd/MM/yyyy").Contains(search)
                                || m.Desc.Contains(search)
                                || m.UnCalled.ToString().Contains(search)).ToList();
 
@@ -197,9 +199,9 @@ namespace MeterReaderAPI.Controllers
             {
                 case "date":
                     if (sortType == "desc")
-                        return list.OrderByDescending(x => x.Date).ToList();
+                        return list.OrderByDescending(x => x.FromDate).ToList();
                     else
-                        return list.OrderBy(x => x.Date).ToList();
+                        return list.OrderBy(x => x.FromDate).ToList();
                 case "notebookNumber":
                     if (sortType == "desc")
                         return list.OrderByDescending(x => x.NotebookNumber).ToList();
