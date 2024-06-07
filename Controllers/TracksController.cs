@@ -79,7 +79,7 @@ namespace MeterReaderAPI.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<TrackDTO> Get(int id)
+        public ActionResult<TrackEditDTO> Get(int id)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace MeterReaderAPI.Controllers
                     return NotFound();
                 }
 
-                var dto = mapper.Map<TrackDTO>(track);
+                var dto = mapper.Map<TrackEditDTO>(track);
                 logger.LogInformation($"Track {id} retrived");
                 return dto;
             }
@@ -128,7 +128,7 @@ namespace MeterReaderAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult Put(int id, [FromForm] TrackDTO trackDTO)
+        public ActionResult Put(int id, [FromForm] TrackEditDTO trackDTO)
         {
             try
             {

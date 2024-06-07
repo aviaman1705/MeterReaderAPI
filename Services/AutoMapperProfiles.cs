@@ -21,6 +21,7 @@ namespace MeterReaderAPI.Services
             CreateMap<Dashboard,DashboardDTO>().ReverseMap();
             CreateMap<DashboardSummary, DashboardSummaryDTO>().ReverseMap();
             CreateMap<MonthlyData, MonthlyDataDTO>().ReverseMap();
+            CreateMap<PopularNotebook, PopularNotebookDTO>().ReverseMap();
 
             //User
             CreateMap<RegisterDTO,UserCredentials>().ReverseMap();

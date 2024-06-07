@@ -14,6 +14,10 @@ namespace MeterReaderAPI.Helpers
             CreateMap<Track, TrackGridItem>()
                 .ForMember(x => x.NotebookNumber, dto => dto.MapFrom(prop => prop.Notebook.Number));
 
+            CreateMap<TrackEditDTO, Track>();
+            CreateMap<Track, TrackEditDTO>();
+
+
             //notebook
             CreateMap<Notebook, NotebookDTO>().ReverseMap();
 

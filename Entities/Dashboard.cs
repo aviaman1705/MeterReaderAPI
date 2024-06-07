@@ -2,12 +2,13 @@
 {
     public class Dashboard
     {
-        public Dashboard()
-        {
-            DashboardSummary = new DashboardSummary();
-            MonthlyData = new List<MonthlyData>();
-        }
-        public DashboardSummary DashboardSummary { get; set; }
-        public List<MonthlyData> MonthlyData { get; set; }      
+        public int Called { get; set; }
+        public int UnCalled { get; set; }
+        public double UnCalledPercentage { get; set; }
+        public Track LowestUnCalledTrack { get; set; }
+        public Track HighestUnCalledTrack { get; set; }
+        public PopularNotebook PopularNotebook { get; set; }
+        public List<MonthlyData> CalledsPerMonths { get; set; }
+        public List<MonthlyData> UnCalledsPerMonths { get; set; }
     }
 }
