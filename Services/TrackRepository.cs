@@ -68,7 +68,7 @@ namespace MeterReaderAPI.Services
             dashboard.PopularNotebook = (from track in _context.Tracks
                                          join notebook in _context.Notebooks on track.NotebookId equals notebook.Id
                                          group track by new { notebook.Number, track.Desc, track.NotebookId } into g
-                                         select new PopularNotebook() { Number = g.Key.Number, Desc = g.Key.Desc, NumberOfRaces = g.Count() }).OrderByDescending(x => x.NumberOfRaces).First();
+                                         select new PopularNotebook() { Id = g.Key.NotebookId, Number = g.Key.Number, Desc = g.Key.Desc, NumberOfRaces = g.Count() }).OrderByDescending(x => x.NumberOfRaces).First();
 
 
             dashboard.CalledsPerMonths = (from track in _context.Tracks
