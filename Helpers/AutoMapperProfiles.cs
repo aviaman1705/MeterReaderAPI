@@ -11,18 +11,16 @@ namespace MeterReaderAPI.Helpers
         public AutoMapperProfiles()
         {
             //track
-            CreateMap<Track, TrackGridItem>()
-                .ForMember(x => x.NotebookNumber, dto => dto.MapFrom(prop => prop.Notebook.Number));
-
+            CreateMap<Track, TrackGridItem>().ForMember(x => x.NotebookNumber, dto => dto.MapFrom(prop => prop.Notebook.Number));
             CreateMap<TrackEditDTO, Track>();
             CreateMap<Track, TrackEditDTO>();
 
-
             //notebook
             CreateMap<Notebook, NotebookDTO>().ReverseMap();
-
             CreateMap<Notebook, AddNotebookDTO>().ReverseMap();
 
+            //search
+            CreateMap<SearchResult, SearchResultDTO>().ReverseMap();
         }
         //public AutoMapperProfiles(GeometryFactory geometryFactory)
         //{

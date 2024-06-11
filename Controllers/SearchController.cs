@@ -12,15 +12,17 @@ namespace MeterReaderAPI.Controllers
     [ApiController]
     public class SearchController : ControllerBase
     {
-        private readonly ITrackRepository repository;
+        private readonly ITrackRepository trackRepository;
+        private readonly ISearchRepository searchRepository;
         private readonly IMapper mapper;
         private readonly ILogger<SearchController> logger;
 
-        public SearchController(ITrackRepository repository, IMapper mapper, ILogger<SearchController> logger)
+        public SearchController(ITrackRepository trackRepository, ISearchRepository searchRepository, IMapper mapper, ILogger<SearchController> logger)
         {
-            this.repository = repository;
+            this.trackRepository = trackRepository;
+            this.searchRepository = searchRepository;
             this.mapper = mapper;
-            this.logger = logger;   
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -28,7 +30,7 @@ namespace MeterReaderAPI.Controllers
         {
             try
             {
-                var queryable = repository.GetAll();
+                var queryable = trackRepository.GetAll();
                 var searchResults = mapper.Map<List<SearchDTO>>(await queryable.Where(x => x.Desc.Contains(term)).ToListAsync());
 
                 int totalItems = searchResults.Count;
@@ -38,6 +40,22 @@ namespace MeterReaderAPI.Controllers
                 logger.LogInformation($"Searches list retrived");
                 return searchResultPaged;
 
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("GetSearchResults")]
+        public async Task<ActionResult<List<SearchResultDTO>>> GetSearchResults(string term)
+        {
+            try
+            {
+                var searchResults = mapper.Map<List<SearchResultDTO>>(searchRepository.Search(term));
+                logger.LogInformation($"Searches results retrived");
+                return searchResults;
             }
             catch (Exception ex)
             {
