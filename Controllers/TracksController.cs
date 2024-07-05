@@ -197,6 +197,11 @@ namespace MeterReaderAPI.Controllers
         {
             switch (sortColumn)
             {
+                case "id":
+                    if (sortType == "desc")
+                        return list.OrderByDescending(x => x.Id).ToList();
+                    else
+                        return list.OrderBy(x => x.Id).ToList();
                 case "date":
                     if (sortType == "desc")
                         return list.OrderByDescending(x => x.FromDate).ToList();
