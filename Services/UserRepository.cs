@@ -17,11 +17,17 @@ namespace MeterReaderAPI.Services
             return result;
         }
 
-        public async Task<IdentityUser> GetUser(string email)
+        public async Task<IdentityUser> GetUserByEmail(string email)
         {
             var result = await _userManager.FindByEmailAsync(email);
             return result;
         }
+        public async Task<IdentityUser> GetUserByName(string username)
+        {
+            var result = await _userManager.FindByNameAsync(username);
+            return result;
+        }
+
         public async Task<SignInResult> Login(string email, string password)
         {
             var result = await _signInManager.PasswordSignInAsync(email, password, false, false);

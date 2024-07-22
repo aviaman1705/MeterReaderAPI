@@ -14,7 +14,7 @@ namespace MeterReaderAPI.DTO.User
 
         [Required]
         
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$", ErrorMessage = "City is required and must be properly formatted.")]
+        //[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$", ErrorMessage = "City is required and must be properly formatted.")]
         public string Password { get; set; }
     }
 }

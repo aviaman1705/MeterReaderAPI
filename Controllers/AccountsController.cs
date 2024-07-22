@@ -49,27 +49,33 @@ namespace MeterReaderAPI.Controllers
             {
                 var user = new IdentityUser { UserName = register.UserName, Email = register.Email };
 
-                var userAllreadyExist = await _repository.GetUser(register.Email);
-                if (userAllreadyExist != null)
+                // בדיקה אם מייל קיים במערכת
+                var emailExist = await _repository.GetUserByEmail(register.Email);
+                if (emailExist != null)
                 {
-                    return BadRequest($"Email {register.Email} is already exsist.");
+                    return BadRequest($"{register.Email} כבר קיים במערכת.");
+                }
+
+                //בדיקה אם שם משתמש קיים במערכת
+                var usernameExist = await _repository.GetUserByName(register.UserName);
+                if (usernameExist != null)
+                {
+                    return BadRequest($"{register.UserName} כבר קיים במערכת.");
+                }
+
+                // יצירת משתמש חדש
+                var result = await _repository.Create(user, register.Password);
+
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation($"Creating ${register.Email} as new user");
+                    return Ok();
                 }
                 else
-                {
-                    var result = await _repository.Create(user, register.Password);
-
-                    if (result.Succeeded)
-                    {
-                        _logger.LogInformation($"Creating ${register.Email} as new user");
-                        return Ok();
-                    }
-                    else
-                    {
-                        _logger.LogError(result.Errors.ToString());
-                        return BadRequest(result.Errors);
-                    }
+                {   
+                    _logger.LogError(result.Errors.ToString());
+                    return BadRequest(result.Errors);
                 }
-
             }
             catch (Exception ex)
             {
@@ -90,12 +96,12 @@ namespace MeterReaderAPI.Controllers
                 {
                     _logger.LogInformation($"{userCredentials.Email} is logged in");
 
-                    var currentUser = _mapper.Map<LoginDTO>(await _repository.GetUser(userCredentials.Email));
+                    var currentUser = _mapper.Map<LoginDTO>(await _repository.GetUserByEmail(userCredentials.Email));
                     return await BuildToken(currentUser);
                 }
                 else
                 {
-                    return BadRequest("Incorrect Login");
+                    return BadRequest("מייל או סיסמא אינם נכונים.");
                 }
             }
             catch (Exception ex)

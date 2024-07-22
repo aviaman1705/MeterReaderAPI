@@ -48,17 +48,21 @@ namespace MeterReaderAPI
 
             services.AddScoped<ITrackRepository, TrackRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<INotebookRepository, NotebookRepository>();  
-            services.AddScoped<ISearchRepository,SearchRepository>();
+            services.AddScoped<INotebookRepository, NotebookRepository>();
+            services.AddScoped<ISearchRepository, SearchRepository>();
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MeterReaderAPI", Version = "v1" });
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-               .AddEntityFrameworkStores<ApplicationDbContext>()
-               .AddDefaultTokenProviders();
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.User.AllowedUserNameCharacters = "אבגדהוזחטיכלמנסעפצקרשתןםףךץabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+/";
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

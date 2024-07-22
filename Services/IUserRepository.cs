@@ -8,6 +8,7 @@ namespace MeterReaderAPI.Services
     {
         Task<IdentityResult> Create(IdentityUser user,string password);
         Task<Microsoft.AspNetCore.Identity.SignInResult> Login(string email, string password);
-        Task<IdentityUser> GetUser(string email);
+        Task<IdentityUser> GetUserByEmail(string email);
+        Task<IdentityUser> GetUserByName(string username);
     }
 }
